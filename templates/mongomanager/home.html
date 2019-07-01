@@ -1,13 +1,5 @@
 {% extends 'base.html' %}
-{% load bootstrap4 %}
-
-{% block content %}
-    <div class="card" style="width: 20rem;">
-  <img class="card-img-top" src="holder.js/100px80" alt="Card image cap">
-  <div class="card-body">
-    <h4 class="card-title">title</h4>
-    <p class="card-text">this is a card text</p>
-    <a href="#" class="btn btn-primary">button</a>
-  </div>
-</div>
+{% load static %}
+{% block body %}
+    {% include 'mongomanager/dashboard.html' %}
 {% endblock %}

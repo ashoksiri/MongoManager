@@ -25,7 +25,7 @@ SECRET_KEY = '=ui@-$_a&*9ok09l-92zitt(pukrdop=)!q3&h0d*4x+8$)%43'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -65,6 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'MongoManager.context_processrs.manager_context'
             ],
         },
     },
@@ -130,3 +131,5 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_URL="/login/"
