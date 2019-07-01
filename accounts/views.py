@@ -4,10 +4,16 @@ from django.shortcuts import render, redirect
 
 
 # Create your views here.
-from accounts.models import User
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
+from accounts.models import User, Database
+from accounts.serializers import DataBaseSeializer
+from accounts.utils import  check_connection
 
-
+@login_required
 def render_home(request):
     return render(request,'base.html',{})
 
@@ -15,7 +21,7 @@ def login_view(request):
 
 
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('accounts:home')
 
     if request.POST:
         username = request.POST['username']
@@ -26,13 +32,13 @@ def login_view(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('home')
+                return redirect('accounts:home')
             else:
-                return render(request, 'mongomanager/login.html', {'warning': 'Your acoount is Inactive'})
+                return render(request, 'mongomanager/login.html', {'loginError': 'Your acoount is Inactive'})
         else:
-            return render(request, 'mongomanager/login.html', {'error': 'Invalid Username Or Password..'})
+            return render(request, 'mongomanager/login.html', {'loginError': 'Invalid Username Or Password..'})
 
-    return render(request, 'mongomanager/login.html')
+    return render(request, 'mongomanager/login.html',{})
 
 
 def register_view(request):
@@ -53,7 +59,35 @@ def register_view(request):
                 return redirect('home')
         except:
             return render(request, 'mongomanager/login.html', {'register': True, 'error': 'user already exists ...'})
+    return render(request,'mongomanager/signup.html')
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('accounts:login')
+
+@login_required()
+def profile_view(request):
+    return render(request,'mongomanager/profile.html',{'page':"User Profile"})
+
+class DatabaseView(ModelViewSet):
+    queryset = Database.objects.all()
+    serializer_class = DataBaseSeializer
+
+    @action(methods=['POST'],detail=False)
+    def testdb(self,request,*args,**kwargs):
+        data = request.data.dict()
+        data.pop('db-type')
+        data.pop('csrfmiddlewaretoken')
+        data.update({'port':int(data.get('port',0))})
+        return Response(check_connection(**data))
+
+
+@login_required
+def manage_databases(request):
+    context = {
+        'page':'Databases',
+        'databases': Database.objects.all()
+    }
+    return render(request,'mongomanager/manage_databases.html',context)
+
+

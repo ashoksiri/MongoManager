@@ -21,9 +21,15 @@
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="./user.html">
+            <a class="nav-link" href="{% url 'accounts:profile' %}">
               <i class="material-icons">person</i>
               <p>User Profile</p>
+            </a>
+          </li>
+            <li class="nav-item ">
+            <a class="nav-link" href="{% url 'accounts:databases' %}">
+              <i class="fas fa-database"></i>
+              <p>Manage Databases</p>
             </a>
           </li>
           <li class="nav-item ">
@@ -60,12 +66,6 @@
             <a class="nav-link" href="./rtl.html">
               <i class="material-icons">language</i>
               <p>RTL Support</p>
-            </a>
-          </li>
-          <li class="nav-item active-pro ">
-            <a class="nav-link" href="./upgrade.html">
-              <i class="material-icons">unarchive</i>
-              <p>Upgrade to PRO</p>
             </a>
           </li>
         </ul>
